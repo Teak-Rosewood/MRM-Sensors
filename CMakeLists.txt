@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(motor_controller)
+project(sensors)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
- #add_compile_options(-std=c++14)
+# add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -11,47 +11,10 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   roscpp
   rospy
-  std_msgs
   sensor_msgs
+  std_msgs
+  message_generation
 )
-
-find_path(pigpio_INCLUDE_DIR 
-	NAMES pigpio.h pigpiod_if.h pigpiod_if2.h
-	HINTS /usr/local/include/pigpio)
-
-find_library(pigpio_LIBRARY
-	NAMES libpigpio.so
-	HINTS /usr/local/lib/pigpio)
-find_library(pigpiod_if_LIBRARY 
-	NAMES libpigpiod_if.so
-	HINTS /usr/local/lib/pigpio)
-find_library(pigpiod_if2_LIBRARY 
-	NAMES libpigpiod_if2.so
-	HINTS /usr/local/lib/pigpio)
-
-set(pigpio_INCLUDE_DIRS ${pigpio_INCLUDE_DIR})
-set(pigpio_INCLUDES     ${pigpio_INCLUDE_DIR})
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(pigpio 
-    DEFAULT_MSG 
-    pigpio_INCLUDE_DIR pigpio_LIBRARY pigpiod_if_LIBRARY pigpiod_if2_LIBRARY)
-
-find_path(Jetson_INCLUDE_DIR 
-	NAMES Callback.h JetsonGPIO.h PublicEnums.h TypeTraits.h JetsonGPIOConfig.h LazyString.h PWM.h WaitResult.h
-	HINTS /usr/local/include/JetsonGPIO)
-
-find_library(Jetson_LIBRARY 
-	NAMES libJetsonGPIO.so
-	HINTS /usr/local/lib/JetsonGPIO)
-
-set(Jetson_INCLUDE_DIRS ${Jetson_INCLUDE_DIR})
-set(Jetson_INCLUDES     ${Jetson_INCLUDE_DIR})
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Jetson
-    DEFAULT_MSG 
-    Jetson_INCLUDE_DIR Jetson_LIBRARY)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -87,10 +50,10 @@ find_package_handle_standard_args(Jetson
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   IMU_DATA.msg
-# )
+add_message_files(
+  FILES
+  imu_data.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -107,11 +70,11 @@ find_package_handle_standard_args(Jetson
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-#   geometry_msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -144,8 +107,8 @@ find_package_handle_standard_args(Jetson
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES martin
-#  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs
+#  LIBRARIES sensors
+#  CATKIN_DEPENDS geometry_msgs roscpp rospy sensor_msgs std_msgs
 #  DEPENDS system_lib
 )
 
@@ -156,15 +119,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include
+# include
   ${catkin_INCLUDE_DIRS}
-  ${pigpio_INCLUDE_DIR}
-  ${Jetson_INCLUDE_DIR}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/martin.cpp
+#   src/${PROJECT_NAME}/sensors.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -175,7 +136,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/martin_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/sensors_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -239,7 +200,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_martin.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_sensors.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
@@ -247,5 +208,5 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(motor_controller src/motor_controller.cpp)
-target_link_libraries(motor_controller ${catkin_LIBRARIES} ${pigpio_LIBRARY} ${Jetson_LIBRARY})
+add_executable(lidar src/lidarData.cpp)
+target_link_libraries(lidar ${catkin_LIBRARIES})
