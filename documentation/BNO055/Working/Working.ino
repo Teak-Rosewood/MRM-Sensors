@@ -8,7 +8,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
 void setup(void) 
 {
-  Serial.begin(9600);
+  Serial.begin(38400);
     delay(1000);
     Serial.println("Orientation Sensor Test"); Serial.println("");
 
@@ -61,11 +61,11 @@ void setup(void)
     bno.getEvent(&event);
     /* always recal the mag as It goes out of calibration very often */
     if (foundCalib){
-        Serial.println("Move sensor slightly to calibrate magnetometers");
-        while (!bno.isFullyCalibrated())
-        {
-            bno.getEvent(&event);
-        }
+        // Serial.println("Move sensor slightly to calibrate magnetometers");
+        // while (!bno.isFullyCalibrated())
+        // {
+        //     bno.getEvent(&event);
+        // }
     }
     else
     {
@@ -126,15 +126,16 @@ void loop() {
   
   
   Serial.print(event_acceleration.acceleration.x, 4);
-  Serial.print(", ");
+  Serial.print(" ");
   Serial.print(event_acceleration.acceleration.y, 4);
-  Serial.print(", ");
+  Serial.print(" ");
   Serial.print(event_acceleration.acceleration.z, 4);
-  Serial.print(", ");
+  Serial.print(" ");
   Serial.print(event_orientation.orientation.x, 4);
-  Serial.print(", ");
+  Serial.print(" ");
   Serial.print(event_orientation.orientation.y, 4);
-  Serial.print(", ");
+  Serial.print(" ");
   Serial.print(event_orientation.orientation.z, 4);
   Serial.println(""); 
 }
+
